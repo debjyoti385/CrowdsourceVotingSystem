@@ -1,0 +1,6 @@
+/node_modules
+/wfh-ninja.iml
+/.idea
+*.pyc
+.DS_STORE
+bootstrap/
