@@ -1,9 +1,8 @@
-# wfh-ninja
+# Crowdsource Voting System
 
-WFH-ninja was originally intended to be a "work from home" excuse generator, allowing the community to vote on the most effective excuses. Now it is a generator of excuses for coming late (in Russian). This repo is built as a generic single page app that displays one quote at a time, with features to "upvote" and "downvote" quotes. User submitted quotes require approval by a registered admin via an admin panel.
+It is a crowdsource voting system where research community can utilize this system to generate manual labelled dataset. This repo has been created by modifying code of wfh-ninja (http://wfh.ninja). is built as a generic single page app that displays one tweet at a time, with features to  classify some classes. User submitted tweets require approval by a registered admin via an admin panel.
 
-Live Demo: http://wfh.ninja/  
-Russian Live Demo: http://vyhodnoi.by/
+Live Demo: http://db03.cs.utah.edu:8888/  
 
 ## Core features
 - Post new quote (user submission of quotes)
