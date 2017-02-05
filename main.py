@@ -110,11 +110,19 @@ def get_quote():
         result = Quote.query.filter(Quote.active == True).all()
         for item in result:
             results[item.id] = item.serialize
-    scores = db.session.query(Vote.quote_id, db.func.sum(Vote.value).label("score")).group_by(Vote.quote_id).join(
+    scores_dem = db.session.query(Vote.quote_id, db.func.sum(Vote.democrat).label("score")).group_by(Vote.quote_id).join(
+        Quote).filter(Quote.id.in_(results.keys())).all()
+    scores_rep = db.session.query(Vote.quote_id, db.func.sum(Vote.republican).label("score")).group_by(Vote.quote_id).join(
+        Quote).filter(Quote.id.in_(results.keys())).all()
+    scores_non = db.session.query(Vote.quote_id, db.func.sum(Vote.non_political).label("score")).group_by(Vote.quote_id).join(
         Quote).filter(Quote.id.in_(results.keys())).all()
 
-    for i in scores:
-        results[i[0]]["score"] = i[1]
+    for i in scores_dem:
+        results[i[0]]["democrat"] = i[1]
+    for i in scores_rep:
+        results[i[0]]["republican"] = i[1]
+    for i in scores_non:
+        results[i[0]]["non_political"] = i[1]
 
     return jsonify(results)
 
@@ -128,10 +136,21 @@ def get_single_quote(id):
     if quote.active is False and current_user.is_authenticated is False:
         return jsonify({"Error": "Quote is hidden"}), 403
     quote.view_count += 1
-    quote_score = db.session.query(db.func.sum(Vote.value)).group_by(Vote.quote_id).filter(Vote.quote_id == id).all()
+    quote_score_dem = db.session.query(db.func.sum(Vote.democrat)).group_by(Vote.quote_id).filter(Vote.quote_id == id).all()
+    quote_score_rep = db.session.query(db.func.sum(Vote.republican)).group_by(Vote.quote_id).filter(Vote.quote_id == id).all()
+    quote_score_non = db.session.query(db.func.sum(Vote.non_political)).group_by(Vote.quote_id).filter(Vote.quote_id == id).all()
     db.session.commit()
     quote = quote.serialize
-    quote["score"] = quote_score[0][0]
+    try:
+        quote["democrat"] = quote_score_dem[0][0]
+        quote["republican"] = quote_score_rep[0][0]
+        quote["non_political"] = quote_score_non[0][0]
+    except IndexError:
+        quote["democrat"] = 0
+        quote["republican"] = 0
+        quote["non_political"] = 0
+        pass
+
     return jsonify(quote)
 
 
@@ -151,7 +170,7 @@ def post_new_quote():
     db.session.add(quote)
     db.session.commit()
 
-    vote = Vote(ip=ip, value=1, quote_id=quote.id)  # auto upvote every new quote by 1
+    vote = Vote(ip=ip, value=0, democrat=0, republican=0, non_political=0, quote_id=quote.id)  # dummy vote for new quote by 1
     db.session.add(vote)
     db.session.commit()
 
@@ -165,13 +184,25 @@ def post_new_vote(quote_id):
     ip = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
     ip = ip.partition(',')[0]
     sign = body['value'];
-    if (sign != 1 and sign != -1):
-        return jsonify({"Error": "Bad vote value"}), 422
+    democrat = 0
+    republican = 0
+    non_political = 0
+    if (sign != 'r' and sign != 'd' and sign != 'n'):
+        return jsonify({"Error": "Bad Vote Value"}), 422
+#    if (sign != 1 and sign != -1):
+#        return jsonify({"Error": "Bad vote value"}), 422
     quote = Quote.query.get(quote_id)
     if quote is None:
         return jsonify({"Error": "Quote not found"}), 404
+    if sign == 'r':
+        republican = 1
+    elif sign == 'd':
+        democrat = 1
+    elif sign == 'n':
+        non_political = 1
+    vote = Vote(ip=ip, value=sign, republican=republican, democrat=democrat, non_political=non_political,  quote_id=quote_id)
 
-    vote = Vote(ip=ip, value=sign, quote_id=quote_id)
+#    vote = Vote(ip=ip, value=sign, quote_id=quote_id)
     db.session.add(vote)
     db.session.commit()
 

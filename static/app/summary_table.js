@@ -23,9 +23,9 @@ var SummaryMain = React.createClass({
       var renderedRows = [];
       var total = _.values(result).length;
       var sortedPositiveResults = _(result).values().filter(function (row) {
-        return row['score'] > 1;
+        return row['democrat'] > 1 || row['republican'] > 1 ;
       }).sortBy(function (row) {
-        return -row['score'];
+        return -row['democrat'] + row['republican'];
       }).slice(0, 15).value();
       sortedPositiveResults.forEach(function (quote) {
         var quoteRow = React.createElement(
@@ -43,8 +43,18 @@ var SummaryMain = React.createClass({
           ),
           React.createElement(
             'td',
-            { 'data-value': parseInt(quote.score) },
-            parseInt(quote.score)
+            { 'data-value': parseInt(quote.non_political) },
+            parseInt(quote.non_political)
+          ),
+          React.createElement(
+            'td',
+            { 'data-value': parseInt(quote.democrat) },
+            parseInt(quote.democrat)
+          ),
+          React.createElement(
+            'td',
+            { 'data-value': parseInt(quote.republican) },
+            parseInt(quote.republican)
           )
         );
         renderedRows.push(quoteRow);
@@ -77,7 +87,7 @@ var SummaryMain = React.createClass({
                 React.createElement(
                   'h3',
                   { className: 'masthead-brand' },
-                  '\u0412\u044B\u0445\u043E\u0434\u043D\u043E\u0439 \u0431\u044B!'
+                  'Summary '
                 )
               )
             )
@@ -88,7 +98,7 @@ var SummaryMain = React.createClass({
             React.createElement(
               'h1',
               null,
-              '\u041B\u0443\u0447\u0448\u0438\u0435 \u043E\u0442\u043C\u0430\u0437\u043A\u0438'
+              'Tweets'
             ),
             React.createElement(
               'form',
@@ -108,12 +118,22 @@ var SummaryMain = React.createClass({
                       React.createElement(
                         'th',
                         null,
-                        '\u041E\u0442\u043C\u0430\u0437\u043A\u0430'
+                        'Tweet'
                       ),
                       React.createElement(
                         'th',
                         null,
-                        '\u0420\u0435\u0439\u0442\u0438\u043D\u0433'
+                        'Non-Political'
+                      ),
+                      React.createElement(
+                        'th',
+                        null,
+                        'Democrat'
+                      ),
+                      React.createElement(
+                        'th',
+                        null,
+                        'Republican'
                       )
                     )
                   ),
@@ -127,13 +147,13 @@ var SummaryMain = React.createClass({
               React.createElement(
                 'div',
                 { className: 'admin-buttons' },
-                '\u0425\u043E\u0447\u0435\u0448\u044C \u043F\u043E\u043C\u043E\u0447\u044C \u0441\u0430\u0439\u0442\u0443? ',
+                'You want to help us? ',
                 React.createElement(
                   'a',
                   { href: '/' },
-                  '\u0413\u043E\u043B\u043E\u0441\u0443\u0439'
+                  'Vote'
                 ),
-                ' \u0437\u0430 \u0445\u043E\u0440\u043E\u0448\u0438\u0435 \u043E\u0442\u043C\u0430\u0437\u043A\u0438!'
+                ' for classification of the tweets!'
               )
             ),
             React.createElement(
@@ -154,7 +174,7 @@ var SummaryMain = React.createClass({
                       React.createElement(
                         'p',
                         null,
-                        '\u0412\u0441\u0435\u0433\u043E: ',
+                        'Total: ',
                         this.state.total
                       )
                     )
@@ -168,7 +188,7 @@ var SummaryMain = React.createClass({
                       React.createElement(
                         'a',
                         { href: '/' },
-                        '\u041D\u0430 \u0433\u043B\u0430\u0432\u043D\u0443\u044E'
+                        'Back Home'
                       )
                     )
                   )

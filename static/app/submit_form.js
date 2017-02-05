@@ -66,16 +66,16 @@ var SubmitForm = React.createClass({
             React.createElement(
               "label",
               { htmlFor: "suggestedQuote", className: "lead" },
-              "Today I was late (a) a job due to the fact that ..."
+              "Want to add a new tweet?"
             ),
             React.createElement("input", { type: "text", className: "form-control input-lg", onChange: this.handleChange,
-              placeholder: " Write your excuse",
+              placeholder: " Add your tweet here",
                 value: this.state.newQuoteText })
           ),
           React.createElement(
             "button",
             { onClick: this.submit, className: "btn btn-lg btn-success" },
-            "All and so it was, yeah"
+            "Submit"
           )
         )
       )

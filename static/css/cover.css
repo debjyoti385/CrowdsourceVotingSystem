@@ -231,9 +231,21 @@ h3.masthead-brand::first-letter {
 }
 
 .badge {
-  vertical-align: middle
+  vertical-align: middle,
+  color: rgb(255,255,255)
 }
 
+.white {
+        background-color rgb(255,255,255);
+        color: rgb(0,0,0)
+}
+.blue {
+        background-color: rgb(46, 109, 164);
+}
+
+.red {
+        background-color: rgb(212, 63, 58);
+}
 /*
  * Footer
  */

@@ -41,32 +41,32 @@ var Main = React.createClass({
       { className: "site-wrapper" },
       React.createElement(Quotes, null),
       React.createElement(SubmitForm, null),
-      React.createElement(
-        "p",
-        { className: "ack" },
-        "Original ",
-        React.createElement(
-          "a",
-          {
-            href: "http://getbootstrap.com/examples/cover/", target: "_blank" },
-          "Cover"
-        ),
-        " template for ",
-        React.createElement(
-          "a",
-          {
-            href: "http://getbootstrap.com", target: "_blank" },
-          "Bootstrap"
-        ),
-        " created by ",
-        React.createElement(
-          "a",
-          {
-            href: "https://twitter.com/mdo", target: "_blank" },
-          "@mdo"
-        ),
-        "."
-      ),
+//      React.createElement(
+//        "p",
+//        { className: "ack" },
+//        "Original ",
+//        React.createElement(
+//          "a",
+//          {
+//            href: "http://getbootstrap.com/examples/cover/", target: "_blank" },
+//          "Cover"
+//        ),
+//        " template for ",
+//        React.createElement(
+//          "a",
+//          {
+//            href: "http://getbootstrap.com", target: "_blank" },
+//          "Bootstrap"
+//        ),
+//        " created by ",
+//        React.createElement(
+//          "a",
+//          {
+//            href: "https://twitter.com/mdo", target: "_blank" },
+//          "@mdo"
+//        ),
+//        "."
+//      ),
       React.createElement(
         "div",
         { className: "mastfoot clearfix" },
@@ -101,7 +101,7 @@ var Main = React.createClass({
                   React.createElement(
                     "div",
                     { onClick: this.scrollDown },
-                    "Add"
+                    "Add "
                   )
                 )
               ),
@@ -110,8 +110,17 @@ var Main = React.createClass({
                 null,
                 React.createElement(
                   "a",
+                  { href: "/login" },
+                  "Login"
+                )
+              ),            
+              React.createElement(
+                "li",
+                null,
+                React.createElement(
+                  "a",
                   { href: "/summary" },
-                  "Top"
+                  "Summary"
                 )
               )
             )

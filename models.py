@@ -42,24 +42,28 @@ class Quote(db.Model):
 class Vote(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ip = db.Column(db.String(15))
-    value = db.Column(db.Integer)
+    value = db.Column(db.String(1))
+    democrat = db.Column(db.Integer)
+    republican = db.Column(db.Integer)
+    non_political = db.Column(db.Integer)
     date_created = db.Column(db.DateTime)
     quote_id = db.Column(db.Integer, db.ForeignKey('quote.id'))
 
-    def __init__(self, ip, value, quote_id):
+    def __init__(self, ip, value, democrat, republican, non_political, quote_id):
         self.ip = ip
         self.value = value
+        self.democrat = democrat
+        self.republican = republican
+        self.non_political = non_political
         self.date_created = datetime.datetime.utcnow()
         self.quote_id = quote_id
 
     def __repr__(self):
-        return json.dumps({"id": self.id, "ip": self.ip, "value": self.value, "date_created": self.date_created,
-                           "quote_id": self.quote_id})
+        return json.dumps({"id": self.id, "ip": self.ip, "value": self.value, "democrat": self.democrat, "republican":self.republican, "non_political":self.non_political, "date_created": self.date_created, "quote_id": self.quote_id})
 
     @property
     def serialize(self):
-        return {"id": self.id, "ip": self.ip, "value": self.value, "date_created": self.date_created.isoformat(),
-                "quote_id": self.quote_id}
+        return {"id": self.id, "ip": self.ip, "value": self.value, "democrat": self.democrat, "republican":self.republican, "non_political":self.non_political, "date_created": self.date_created.isoformat(), "quote_id": self.quote_id}
 
 
 class User(db.Model, UserMixin):
